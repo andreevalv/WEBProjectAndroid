@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/video_view"
+        android:layout_width="407dp"
+        android:layout_height="386dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/changeRoomButton"
+        android:layout_width="fill_parent"
+        android:layout_height="47dp"
+        android:layout_marginTop="176dp"
+        android:text="Button"
+        app:layout_constraintTop_toBottomOf="@+id/userNameTextView"
+        tools:layout_editor_absoluteX="2dp" />
+
+    <TextView
+        android:id="@+id/userNameTextView"
+        android:layout_width="272dp"
+        android:layout_height="29dp"
+        android:text="Hello, %username%"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/roomNameText"
+        android:layout_width="fill_parent"
+        android:layout_height="47dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintBottom_toTopOf="@+id/changeRoomButton"
+        app:layout_constraintTop_toBottomOf="@+id/roomNameTextView"
+        app:layout_constraintVertical_bias="0.835"
+        tools:layout_editor_absoluteX="2dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="88dp"
+        android:layout_height="44dp"
+        android:text="Button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/createRoomBtn"
+        android:layout_width="fill_parent"
+        android:layout_height="47dp"
+        android:layout_marginTop="16dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeRoomButton" />
+
+    <TextView
+        android:id="@+id/roomNameTextView"
+        android:layout_width="272dp"
+        android:layout_height="33dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userNameTextView" />
+</androidx.constraintlayout.widget.ConstraintLayout>
