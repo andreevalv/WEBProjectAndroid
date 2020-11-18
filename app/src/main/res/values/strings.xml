@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">VSynControl</string>
+    <string name="action_settings">AS</string>
+    <string name="action_favorite">AF</string>
+    <string name="action_settings2">AS2</string>
+    <string name="userProfile">Profile</string>
+    <string name="changeRoom">Change room</string>
+    <string name="createRoom">Create room</string>
+    <string name="logoutItemString">Logout</string>
+    <string name="textTitle">TestText</string>
 </resources>

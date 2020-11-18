@@ -8,14 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-
-import com.here.oksse.OkSse;
-import com.here.oksse.ServerSentEvent;
-import com.star_zero.sse.EventHandler;
 import com.star_zero.sse.EventSource;
 import com.star_zero.sse.MessageEvent;
 
-import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,6 +47,7 @@ public class WebWorker extends Worker{
             response = StnController.getInstance().getClient().newCall(csrf_req).execute();
             String respJsonData = response.body().string();
             String tokenVal = new JSONObject(respJsonData).getString("_csrf.token");
+            response.close();
             return tokenVal;
         } catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -117,6 +114,28 @@ public class WebWorker extends Worker{
         getRoomName();
         updateSse();
         updateRoomVideo();
+        updateVideosList();
+        StnController.getInstance().setIsLoggedIn(true);
+    }
+
+    private void updateVideosList() {
+        Request getVideosReq = new Request.Builder()
+                .url(urlBase + "videofiles")
+                .build();
+        try {
+            Response getVideosResp = StnController.getInstance().getClient().newCall(getVideosReq).execute();
+            String jsonList = getVideosResp.body().string();
+            JSONArray jsonListObj = new JSONObject(jsonList).getJSONArray("files");
+            StnController.getInstance().cleanVideoList();
+            for (int i = 0 ; i < jsonListObj.length(); i++){
+                StnController.getInstance().appendVideoToList(jsonListObj.getString(i));
+            }
+
+            Log.v("TAG_LIST", StnController.getInstance().getVideoList().toString());
+            getVideosResp.close();
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getRoomName() {
@@ -126,6 +145,7 @@ public class WebWorker extends Worker{
         try {
             Response roomNameResp = StnController.getInstance().getClient().newCall(roomNameReq).execute();
             StnController.getInstance().setRoomName(roomNameResp.body().string());
+            roomNameResp.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -139,6 +159,7 @@ public class WebWorker extends Worker{
         try {
             Response meAdminResp = StnController.getInstance().getClient().newCall(meAdminRequest).execute();
             StnController.getInstance().setMeAdmin(meAdminResp.body().string());
+            meAdminResp.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -176,7 +197,8 @@ public class WebWorker extends Worker{
                     @Override
                     public void onError(@Nullable Exception e) {
                         Log.v("Tag", "onError");
-                        StnController.getInstance().getSseClient().close();
+                        if(StnController.getInstance().getSseClient() != null)
+                            StnController.getInstance().getSseClient().close();
                     }
                 });
 
@@ -193,6 +215,7 @@ public class WebWorker extends Worker{
         try {
             Response videoPathResp = StnController.getInstance().getClient().newCall(videoPathReq).execute();
             StnController.getInstance().setVideoPath(videoPathResp.body().string());
+            videoPathResp.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -216,9 +239,8 @@ public class WebWorker extends Worker{
                     .build();
 
             Response login_resp = client.newCall(login_req).execute();
-
             StnController.getInstance().setLoggedUser(username);
-
+            login_resp.close();
             buildRoom();
 
         } catch (IOException e) {
@@ -228,17 +250,23 @@ public class WebWorker extends Worker{
 
     public void changeRoomWork(String roomName){
         Log.v("Tag", "Change room");
-        HttpUrl.Builder httpBuilder = HttpUrl.parse(urlBase + "join_invite").newBuilder();
-        httpBuilder.addQueryParameter("join_invite", roomName);
+
+        RequestBody chageRoomReqBoy = new FormBody.Builder()
+                .add("_csrf", getCsrf())
+                .add("join_invite", roomName)
+                .build();
 
         Request changeRoomReq = new Request.Builder()
-                .url(httpBuilder.build()).build();
+                .post(chageRoomReqBoy)
+                .url(urlBase + "join_invite")
+                .build();
 
         OkHttpClient client = StnController.getInstance().getClient();
 
         try {
             Response changeRoomResp = client.newCall(changeRoomReq).execute();
             Log.v("Tag", String.valueOf(changeRoomResp.code()));
+            changeRoomResp.close();
             buildRoom();
         } catch (IOException e) {
             e.printStackTrace();
@@ -275,6 +303,45 @@ public class WebWorker extends Worker{
         }
     }
 
+
+
+    private void logoutWork() {
+        RequestBody logoutBody = new FormBody.Builder()
+                .add("_csrf", getCsrf())
+                .build();
+        Request logoutReq = new Request.Builder()
+                .url(urlBase + "logout")
+                .post(logoutBody)
+                .build();
+        try {
+            Response logoutResp = StnController.getInstance().getClient().newCall(logoutReq).execute();
+            logoutResp.close();
+            StnController.getInstance().rebuildClient();
+            StnController.getInstance().setIsLoggedIn(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private void newVideoWork(String newVideo) {
+        RequestBody newVideoReqBody = new FormBody.Builder()
+                .add("_csrf", getCsrf())
+                .build();
+        Request newVideoReq = new Request.Builder()
+                .post(newVideoReqBody)
+                .url(urlVideoBase + "setvideo/" + newVideo)
+                .build();
+        try {
+            Response newVideoResp = StnController.getInstance().getClient().newCall(newVideoReq).execute();
+            newVideoResp.close();
+            buildRoom();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @NonNull
     @Override
     public Result doWork() {
@@ -301,8 +368,100 @@ public class WebWorker extends Worker{
 
             case "createRoom":
                 createRoomWork();
+                break;
+
+            case "logout":
+                logoutWork();
+                break;
+
+            case "newVideo":
+                String newVide = getInputData().getString("newVideo");
+                newVideoWork(newVide);
+                break;
+                
+            case "deleteAccount":
+                deleteAccountWork();
+                break;
+
+            case "changePassword":
+                String oldPassword = getInputData().getString("oldPassword");
+                String newPassword = getInputData().getString("newPassword");
+                String repeatNewPassword = getInputData().getString("repeatNewPassword");
+
+                changePasswordWork(oldPassword, newPassword, repeatNewPassword);
+                break;
+
+            case "register":
+                String regPassword = getInputData().getString("password");
+                String regLogin = getInputData().getString("username");
+                String regRepeatePassword = getInputData().getString("repeatPassword");
+
+                registerWork(regLogin, regPassword, regRepeatePassword);
+                break;
         }
 
         return Result.success();
+    }
+
+    private void registerWork(String regLogin, String regPassword, String regRepeatePassword) {
+        RequestBody registerBody = new FormBody.Builder()
+                .add("_csrf", getCsrf())
+                .add("username", regLogin)
+                .add("password", regPassword)
+                .add("pass_chk", regRepeatePassword)
+                .build();
+
+        Request registerReq = new Request.Builder()
+                .post(registerBody)
+                .url(urlBase + "registration")
+                .build();
+
+        try {
+            Response registerResp = StnController.getInstance().getClient().newCall(registerReq).execute();
+            registerResp.close();
+            StnController.getInstance().setIsLoggedIn(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void changePasswordWork(String oldPassword, String newPassword, String repeatNewPassword) {
+        RequestBody changePasswordBody = new FormBody.Builder()
+                .add("_csrf", getCsrf())
+                .add("old_password", oldPassword)
+                .add("new_password", newPassword)
+                .add("new_password_check", repeatNewPassword)
+                .build();
+
+        Request changePasswordReq = new Request.Builder()
+                .post(changePasswordBody)
+                .url(urlBase + "chg_psw")
+                .build();
+
+        try {
+            Response changePasswordResp = StnController.getInstance().getClient().newCall(changePasswordReq).execute();
+            changePasswordResp.close();
+            StnController.getInstance().setIsLoggedIn(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteAccountWork() {
+        RequestBody deleteAccountBoyde = new FormBody.Builder()
+                .add("_csrf", getCsrf())
+                .add("erase_me", "")
+                .build();
+        Request deleteAccountReq = new Request.Builder()
+                .post(deleteAccountBoyde)
+                .url(urlBase + "erase_me")
+                .build();
+        try {
+            Response eraseResp = StnController.getInstance().getClient().newCall(deleteAccountReq).execute();
+            eraseResp.close();
+            StnController.getInstance().setIsLoggedIn(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

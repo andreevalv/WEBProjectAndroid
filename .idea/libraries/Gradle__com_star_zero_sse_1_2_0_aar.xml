@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.star_zero:sse:1.2.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9ab4aac7ca3894041bb8df60d95abe73/jetified-sse-1.2.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9ab4aac7ca3894041bb8df60d95abe73/jetified-sse-1.2.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9ab4aac7ca3894041bb8df60d95abe73/jetified-sse-1.2.0/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.star_zero/sse/1.2.0/3e6e386187bf516f3ae9caa23e121d10a957ef6e/sse-1.2.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.star_zero/sse/1.2.0/1bb290395f172f718457116d1b0e10f985ff3869/sse-1.2.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

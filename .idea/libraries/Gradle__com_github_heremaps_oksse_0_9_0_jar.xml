@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.heremaps:oksse:0.9.0@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.heremaps/oksse/0.9.0/92b55ff09b739231c176a2a513bd8bbb6e488889/oksse-0.9.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.heremaps/oksse/0.9.0/2c152dd666234792714867a174d7241d51a01b65/oksse-0.9.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.heremaps/oksse/0.9.0/c090bff615137567dc60b8d9a123c93e39f39ab4/oksse-0.9.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

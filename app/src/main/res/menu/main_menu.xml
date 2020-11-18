@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Settings, should always be in the overflow -->
+    <item
+        android:id="@+id/userProfile"
+        android:icon="@drawable/exo_ic_settings"
+        android:title="@string/userProfile"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/changeRoom"
+        android:title="@string/changeRoom"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/createRoom"
+        android:title="@string/createRoom"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/selectVideo"
+        android:title="Select video"
+        app:showAsAction="never"/>
+    <item android:id="@+id/deleteUser"
+        android:title="Delete account"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/logoutItem"
+        android:title="@string/logoutItemString"
+        app:showAsAction="never"/>
+
+</menu>

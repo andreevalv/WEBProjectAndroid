@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
@@ -45,7 +46,6 @@ public class StnController {
                             String session_cookie = list.get(0).toString().split(";")[0];
                             Log.v("TAG:COOKIE", session_cookie);
                             StnController.getInstance().setSessionCookie(session_cookie);
-
                         }
 
                         @NotNull
@@ -55,7 +55,11 @@ public class StnController {
                             return cookies != null ? cookies : new ArrayList<Cookie>();
                         }
                     }
-            ).build();
+            )
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build();
 
     private EventSource sseClient = null;
     private ServerSentEvent cliNotifyEvent;
@@ -72,17 +76,46 @@ public class StnController {
     public EventSource getSseClient(){return sseClient;}
     public void setSseClient(EventSource setClient){sseClient = setClient;}
 
-    private MutableLiveData<String> videoPath = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isLoggedIn = new MutableLiveData<>();
     private MutableLiveData<Pair<String, String>> playerAction = new MutableLiveData<>();
+    private MutableLiveData<Boolean> roomRebuildedEmitter = new MutableLiveData<>();
+    private String videoPath;
     private String loggedUser;
     private String sessionCookie;
     private boolean meAdmin;
+    ArrayList<String> videosList = new ArrayList<>();
 
     public void setVideoPath(String val){
-        videoPath.postValue(val);
+        videoPath = val;
     }
 
-    public MutableLiveData<String> getVideoPath(){
+    public void rebuildClient(){
+        client = new OkHttpClient().newBuilder()
+                .cookieJar(
+                        new CookieJar() {
+
+                            private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
+
+                            @Override
+                            public void saveFromResponse(@NotNull HttpUrl httpUrl, @NotNull List<Cookie> list) {
+                                cookieStore.put(httpUrl.host(), list);
+                                String session_cookie = list.get(0).toString().split(";")[0];
+                                Log.v("TAG:COOKIE", session_cookie);
+                                StnController.getInstance().setSessionCookie(session_cookie);
+
+                            }
+
+                            @NotNull
+                            @Override
+                            public List<Cookie> loadForRequest(@NotNull HttpUrl httpUrl) {
+                                List<Cookie> cookies = cookieStore.get(httpUrl.host());
+                                return cookies != null ? cookies : new ArrayList<Cookie>();
+                            }
+                        }
+                ).build();
+    }
+
+    public String getVideoPath(){
         return videoPath;
     }
 
@@ -174,5 +207,88 @@ public class StnController {
 
     public String getRoomName(){
         return roomName;
+    }
+
+    public MutableLiveData<Boolean> getIsLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setIsLoggedIn(Boolean val){
+        isLoggedIn.postValue(val);
+    }
+
+    public void logout() {
+        Data logoutData = new Data.Builder()
+                .putString("Action", "logout")
+                .build();
+        WorkRequest logoutWorkReq = new OneTimeWorkRequest.Builder(WebWorker.class)
+                .setInputData(logoutData)
+                .build();
+        WorkManager.getInstance().enqueue(logoutWorkReq);
+    }
+
+    public void roomRebuilded() {
+        roomRebuildedEmitter.postValue(true);
+    }
+
+    public void appendVideoToList(String video){
+        videosList.add(video);
+    }
+
+    public ArrayList<String> getVideoList() {
+        return videosList;
+    }
+
+    public void cleanVideoList(){
+        videosList.clear();
+    }
+
+    public void setNewVideo(String toString) {
+        Data newVieoWorkData = new Data.Builder()
+                .putString("Action", "newVideo")
+                .putString("newVideo", toString)
+                .build();
+        WorkRequest newVideoWorkRequest = new OneTimeWorkRequest.Builder(WebWorker.class)
+                .setInputData(newVieoWorkData).build();
+        WorkManager.getInstance().enqueue(newVideoWorkRequest);
+    }
+
+    public void deleteAccount() {
+        Data deleteAccountData = new Data.Builder()
+        .putString("Action", "deleteAccount")
+        .build();
+
+        WorkRequest deleteRequest = new OneTimeWorkRequest.Builder(WebWorker.class)
+                .setInputData(deleteAccountData)
+                .build();
+        WorkManager.getInstance().enqueue(deleteRequest);
+    }
+
+    public void changePassword(String oldPassword, String newPassword, String repeatNewPassword) {
+        Data changePasswordData = new Data.Builder()
+                .putString("Action", "changePassword")
+                .putString("oldPassword", oldPassword)
+                .putString("newPassword", newPassword)
+                .putString("repeatNewPassword", repeatNewPassword)
+                .build();
+
+        WorkRequest changePasswordRequest = new OneTimeWorkRequest.Builder(WebWorker.class).
+                setInputData(changePasswordData)
+                .build();
+        WorkManager.getInstance().enqueue(changePasswordRequest);
+    }
+
+    public void registerUser(String username, String password, String repeatPassword) {
+        Data registerData = new Data.Builder()
+                .putString("Action", "register")
+                .putString("username", username)
+                .putString("password", password)
+                .putString("repeatPassword", repeatPassword)
+                .build();
+
+        WorkRequest registerRequest = new OneTimeWorkRequest.Builder(WebWorker.class)
+                .setInputData(registerData)
+                .build();
+        WorkManager.getInstance().enqueue(registerRequest);
     }
 }
