@@ -1,8 +1,5 @@
 <resources>
-    <string name="app_name">VSynControl</string>
-    <string name="action_settings">AS</string>
-    <string name="action_favorite">AF</string>
-    <string name="action_settings2">AS2</string>
+    <string name="app_name">WEBProject</string>
     <string name="userProfile">Profile</string>
     <string name="changeRoom">Change room</string>
     <string name="createRoom">Create room</string>

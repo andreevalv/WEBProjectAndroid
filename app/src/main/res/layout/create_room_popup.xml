@@ -1,42 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/exo_black_opacity_70">
+    android:background="@color/colorMyHeader">
 
     <Button
         android:id="@+id/sureToCreateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="76dp"
-        android:text="YES"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sureToCreate" />
+        android:layout_width="208dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="84dp"
+        android:background="@color/colorButton"
+        android:text="Create"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cancelCreateButton"  />
 
     <TextView
         android:id="@+id/sureToCreate"
-        android:layout_width="167dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="120dp"
-        android:text="R U SHURE?"
+        android:layout_width="186dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="84dp"
+        android:text="Create new room?"
+        android:textColor="@color/colorAppName"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
         android:id="@+id/cancelCreateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        android:layout_marginEnd="64dp"
-        android:text="NO"
+        android:layout_width="208dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="84dp"
+        android:background="@color/colorButton"
+        android:text="Cancel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/sureToCreateButton"
         app:layout_constraintTop_toBottomOf="@+id/sureToCreate" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="139dp"
+        android:layout_height="141dp"
+        android:layout_marginTop="116dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/poly_logo" />
 </androidx.constraintlayout.widget.ConstraintLayout>

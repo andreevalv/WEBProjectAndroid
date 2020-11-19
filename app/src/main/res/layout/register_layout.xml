@@ -4,78 +4,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/exo_black_opacity_70">
+    android:background="@color/colorMyHeader">
 
-    <TextView
-        android:id="@+id/newUserNameLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="44dp"
-        android:text="User name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/newUserNameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newUserNameLabel"
-        android:background="@color/exo_white"/>
-
-    <TextView
-        android:id="@+id/newPasswordLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="36dp"
-        android:text="Password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newUserNameText" />
 
     <EditText
         android:id="@+id/newPasswordText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="84dp"
+        android:background="@color/exo_white"
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newPasswordLabel"
-        android:background="@color/exo_white"/>
+        app:layout_constraintTop_toBottomOf="@+id/newPasswordLabel" />
 
-    <TextView
-        android:id="@+id/repeatNewPasswordLabel"
+    <EditText
+        android:id="@+id/newUserNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="28dp"
-        android:text="Repeate password"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="84dp"
+        android:background="@color/exo_white"
+        android:ems="10"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newPasswordText" />
+        app:layout_constraintTop_toBottomOf="@+id/newUserNameLabel" />
 
     <EditText
         android:id="@+id/repeatNewPasswordText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="84dp"
+        android:background="@color/exo_white"
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repeatNewPasswordLabel"
-        android:background="@color/exo_white"/>
+        app:layout_constraintTop_toBottomOf="@+id/repeatNewPasswordLabel" />
+
+    <TextView
+        android:id="@+id/newPasswordLabel"
+        android:layout_width="186dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="84dp"
+        android:text="Password"
+        android:textColor="@color/colorAppName"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newUserNameText" />
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="164dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="20dp"
+        android:layout_width="208dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="84dp"
+        android:background="@color/colorButton"
         android:text="Register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/repeatNewPasswordText" />
+
+    <TextView
+        android:id="@+id/newUserNameLabel"
+        android:layout_width="186dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="84dp"
+        android:text="Login"
+        android:textColor="@color/colorAppName"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/repeatNewPasswordLabel"
+        android:layout_width="186dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="84dp"
+        android:text="Repeate password"
+        android:textColor="@color/colorAppName"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newPasswordText" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="139dp"
+        android:layout_height="141dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/poly_logo" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

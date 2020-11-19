@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+
+import com.star_zero.sse.EventHandler;
 import com.star_zero.sse.EventSource;
 import com.star_zero.sse.MessageEvent;
 

@@ -1,18 +1,15 @@
 package com.example.myapplication;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import android.net.Uri;
-import android.os.Build;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -187,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setLogo(R.drawable.icon_padding);
 
         StnController controller = StnController.getInstance();
 
@@ -218,27 +216,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         initLogin();
-
-       /* Button joinBtn = findViewById(R.id.changeRoomButton);
-        joinBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText roomNameEditText = findViewById(R.id.roomNameText);
-                String roomName = roomNameEditText.getText().toString();
-                Log.v("Tag", roomName);
-                controller.changeRoom(roomName);
-            }
-        });
-
-        Button createRoomBtn = findViewById(R.id.createRoomBtn);
-        createRoomBtn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        controller.createRoom();
-                    }
-                }
-        );*/
     }
 
     @Override
