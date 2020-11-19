@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         DataSource.Factory dataSourceFactory = () -> {
             HttpDataSource dataSource = httpDataSourceFactory.createDataSource();
             // Set a custom authentication request header.
-            dataSource.setRequestProperty("Cookie", "SESSION=123456");
+           // dataSource.setRequestProperty("Cookie", "SESSION=123456");
             return dataSource;
         };
 
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             player.release();
 
         player = new SimpleExoPlayer.Builder(this)
-                .setMediaSourceFactory(new DefaultMediaSourceFactory(dataSourceFactory))
+                //.setMediaSourceFactory(new DefaultMediaSourceFactory(dataSourceFactory))
                 .build();
         PlayerView playerView = findViewById(R.id.video_view);
         playerView.setPlayer(player);
@@ -66,8 +66,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
                 long curPos = player.getCurrentPosition();
+                Double dPos = Double.valueOf(curPos);
+                Log.v("PLAYER_TIME", String.valueOf(curPos));
+                Log.v("TIME_D", String.valueOf(dPos));
+                Log.v("Time_DD", String.valueOf(dPos / 1000));
                 Log.v("Tag", String.valueOf(curPos / 1000));
-                Double posInSec = Double.valueOf(curPos / 1000);
+                Double posInSec = dPos / 1000;
                 if (isPlaying){
                     StnController.getInstance().sendPlayEvent("play", String.valueOf(posInSec));
                 } else {
@@ -85,9 +89,24 @@ public class MainActivity extends AppCompatActivity {
                     public void onChanged(Pair<String, String> stringStringPair) {
                         String action = stringStringPair.first;
                         String data = stringStringPair.second;
+
                         Long position = (long) Double.parseDouble(data) * 1000;
                         Log.v(action, data);
                         Log.v(action, String.valueOf(position));
+                        Log.v("SPLIT", String.valueOf(data.split("\\.").length));
+                        Long tstPos = 0L;
+                        if(data.contains(".")){
+                            String seconds = data.split("\\.")[0];
+                            String msecs = data.split("\\.")[1];
+                            msecs = msecs.substring(0, Math.min(3, msecs.length()));
+                            tstPos = Long.parseLong(seconds) * 1000 + Long.parseLong(msecs);
+                        } else {
+                            tstPos *= 1000;
+                        }
+
+                        Log.v(action, tstPos.toString());
+                        position = tstPos;
+
 
                         switch (action){
                             case "played":

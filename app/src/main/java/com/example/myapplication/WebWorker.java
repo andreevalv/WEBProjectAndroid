@@ -199,10 +199,12 @@ public class WebWorker extends Worker{
                     @Override
                     public void onError(@Nullable Exception e) {
                         Log.v("Tag", "onError");
-                        if(StnController.getInstance().getSseClient() != null)
-                            StnController.getInstance().getSseClient().close();
+                        /*if(StnController.getInstance().getSseClient() != null)
+                            StnController.getInstance().getSseClient().close();*/
                     }
                 });
+
+        Log.v("SSE_TMEOI", String.valueOf(eventSource.getReadTimeout()));
 
         StnController.getInstance().setSseClient(eventSource);
         eventSource.connect();
